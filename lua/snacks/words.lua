@@ -12,13 +12,13 @@ M.meta = {
 ---@class snacks.words.Config
 ---@field enabled? boolean
 local defaults = {
-  debounce = 200, -- time in ms to wait before updating
-  notify_jump = false, -- show a notification when jumping
-  notify_end = true, -- show a notification when reaching the end
-  foldopen = true, -- open folds after jumping
-  jumplist = true, -- set jump point before jumping
+  debounce = 200,            -- time in ms to wait before updating
+  notify_jump = false,       -- show a notification when jumping
+  notify_end = true,         -- show a notification when reaching the end
+  foldopen = true,           -- open folds after jumping
+  jumplist = true,           -- set jump point before jumping
   modes = { "n", "i", "c" }, -- modes to show references
-  filter = function(buf) -- what buffers to enable `snacks.words`
+  filter = function(buf)     -- what buffers to enable `snacks.words`
     return vim.g.snacks_words ~= false and vim.b[buf].snacks_words ~= false
   end,
 }
@@ -108,7 +108,7 @@ function M.is_enabled(opts)
   end
   local clients = (vim.lsp.get_clients or vim.lsp.get_active_clients)({ bufnr = buf })
   clients = vim.tbl_filter(function(client)
-    return client.supports_method("textDocument/documentHighlight", { bufnr = buf })
+    return client:supports_method("textDocument/documentHighlight", { bufnr = buf })
   end, clients)
   return #clients > 0
 end

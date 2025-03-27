@@ -2,7 +2,8 @@
 local M = {}
 
 M.meta = {
-  desc = "LSP-integrated file renaming with support for plugins like [neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim) and [mini.files](https://github.com/echasnovski/mini.files).",
+  desc =
+  "LSP-integrated file renaming with support for plugins like [neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim) and [mini.files](https://github.com/echasnovski/mini.files).",
 }
 
 -- Renames the provided file, or the current buffer's file.
@@ -83,14 +84,16 @@ end
 ---@param to string
 ---@param rename? fun()
 function M.on_rename_file(from, to, rename)
-  local changes = { files = { {
-    oldUri = vim.uri_from_fname(from),
-    newUri = vim.uri_from_fname(to),
-  } } }
+  local changes = {
+    files = { {
+      oldUri = vim.uri_from_fname(from),
+      newUri = vim.uri_from_fname(to),
+    } }
+  }
 
   local clients = (vim.lsp.get_clients or vim.lsp.get_active_clients)()
   for _, client in ipairs(clients) do
-    if client.supports_method("workspace/willRenameFiles") then
+    if client:supports_method("workspace/willRenameFiles") then
       local resp = client.request_sync("workspace/willRenameFiles", changes, 1000, 0)
       if resp and resp.result ~= nil then
         vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
@@ -103,7 +106,7 @@ function M.on_rename_file(from, to, rename)
   end
 
   for _, client in ipairs(clients) do
-    if client.supports_method("workspace/didRenameFiles") then
+    if client:supports_method("workspace/didRenameFiles") then
       client.notify("workspace/didRenameFiles", changes)
     end
   end
