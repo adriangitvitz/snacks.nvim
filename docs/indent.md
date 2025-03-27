@@ -98,11 +98,6 @@ Similar plugins:
       arrow = ">",
     },
   },
-  blank = {
-    char = " ",
-    -- char = "·",
-    hl = "SnacksIndentBlank", ---@type string|string[] hl group for blank spaces
-  },
   -- filter for buffers to enable indent guides
   filter = function(buf)
     return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
@@ -120,6 +115,12 @@ Similar plugins:
 ```
 
 ## 📦 Module
+
+### `Snacks.indent.debug_win()`
+
+```lua
+Snacks.indent.debug_win()
+```
 
 ### `Snacks.indent.disable()`
 

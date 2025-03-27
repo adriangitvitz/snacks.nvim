@@ -9,9 +9,10 @@ function M.set_lines(lines, opts)
   lines = type(lines) == "string" and vim.split(lines, "\n") or lines
   vim.api.nvim_buf_set_lines(0, 0, -1, false, lines --[[ @as string[] ]])
   vim.bo.filetype = opts.ft or ""
+  vim.treesitter.stop()
+  assert(not vim.b.ts_highlight, "treesitter highlight is still enabled")
+  vim.b.snacks_ts = nil
   if opts.ts then
-    vim.treesitter.stop()
-    assert(not vim.b.ts_highlight, "treesitter highlight is still enabled")
     vim.treesitter.start()
     assert(vim.b.ts_highlight, "treesitter highlight is not enabled")
   end
@@ -77,14 +78,15 @@ describe("scope", function()
             ft = "lua",
             ts = ts,
           })
-          local scope = Snacks.scope.get({
+          Snacks.scope.get(function(scope)
+            assert(scope)
+            assert((scope.node == nil) == not ts)
+            assert.same(scope.from, s[1])
+            assert.same(scope.to, s[2])
+          end, {
             pos = { line, 0 },
             treesitter = { enabled = ts },
           })
-          assert(scope)
-          assert((scope.node == nil) == not ts)
-          assert.same(scope.from, s[1])
-          assert.same(scope.to, s[2])
         end)
       end
     end

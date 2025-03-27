@@ -93,6 +93,19 @@ The other options are used with `:lua Snacks.dashboard()`
 }
 ```
 
+### `help`
+
+```lua
+{
+  position = "float",
+  backdrop = false,
+  border = "top",
+  row = -1,
+  width = 0,
+  height = 0.3,
+}
+```
+
 ### `input`
 
 ```lua
@@ -124,8 +137,11 @@ The other options are used with `:lua Snacks.dashboard()`
   keys = {
     n_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "n", expr = true },
     i_esc = { "<esc>", { "cmp_close", "stopinsert" }, mode = "i", expr = true },
-    i_cr = { "<cr>", { "cmp_accept", "confirm" }, mode = "i", expr = true },
+    i_cr = { "<cr>", { "cmp_accept", "confirm" }, mode = { "i", "n" }, expr = true },
     i_tab = { "<tab>", { "cmp_select_next", "cmp" }, mode = "i", expr = true },
+    i_ctrl_w = { "<c-w>", "<c-s-w>", mode = "i", expr = true },
+    i_up = { "<up>", { "hist_up" }, mode = { "i", "n" } },
+    i_down = { "<down>", { "hist_down" }, mode = { "i", "n" } },
     q = "cancel",
   },
 }
@@ -145,6 +161,7 @@ The other options are used with `:lua Snacks.dashboard()`
     cursorcolumn = false,
     cursorline = false,
     cursorlineopt = "both",
+    colorcolumn = "",
     fillchars = "eob: ,lastline:…",
     list = false,
     listchars = "extends:…,tab:  ",
@@ -213,6 +230,20 @@ The other options are used with `:lua Snacks.dashboard()`
 }
 ```
 
+### `snacks_image`
+
+```lua
+{
+  relative = "cursor",
+  border = "rounded",
+  focusable = false,
+  backdrop = false,
+  row = 1,
+  col = 1,
+  -- width/height are automatically set by the image size unless specified below
+}
+```
+
 ### `split`
 
 ```lua
@@ -278,6 +309,9 @@ The other options are used with `:lua Snacks.dashboard()`
   zindex = 40,
   wo = {
     winhighlight = "NormalFloat:Normal",
+  },
+  w = {
+    snacks_main = true,
   },
 }
 ```
